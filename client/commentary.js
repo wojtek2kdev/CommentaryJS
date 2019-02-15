@@ -2,6 +2,7 @@ class Channel {
 
 	constructor({
 		target="#commentary",
+		isBlogLike=true,
 		wsURI,
 		commentsURI,
 	} = {},
@@ -17,12 +18,15 @@ class Channel {
 	} = {},
 	{
 		dataExtractor,
+		summonUserInfo,
 	}){
 		
 		this.commentsURI = commentsURI;
 		this.wsURI = wsURI;
+		this.isBlogLike = isBlogLike;
 
 		this.dataExtractor = dataExtractor;
+		this.summonUserInfo = summonUserInfo;
 
 		this.commentListClass = commentListClass;
 		this.commentContainerClass = commentContainerClass;
@@ -33,13 +37,20 @@ class Channel {
 		this.reactionClass = reactionClass;
 		this.inputClass = inputClass;
 
+		this.fetchUserInfo().then(userInfo => this.userInfo = userInfo);
+
 		this.objective = document.querySelector(target);
 
 		this.fetchComments().then(comments => {
-			const channel = this.generateChannel(comments);												 
+			this.commentsCount = comments.length;
+			let header;
+			if(this.isBlogLike) header = this.generateBlogLikeHeader();
+			const channel = this.generateChannel(comments);
+			
+			this.objective.appendChild(header);
 			this.objective.appendChild(channel);
-		});
 
+		});
 	}
 
 	async fetchComments(){
@@ -88,7 +99,43 @@ class Channel {
 
 	}
 
+	async fetchUserInfo(){
+		const {
+			id,
+			nickname,
+			token
+		} = await this.summonUserInfo();
+		return {
+			id,
+			nickname,
+			token,
+		};
+	}
+
 	generateReactions(comment, commentContainer){
+
+	}
+
+	generateCommentInput(){
+
+	}
+
+	generateBlogLikeHeader(){
+
+		const headerContainer = document.createElement('div');
+		headerContainer.setAttribute("class", this.commentsHeaderClass);
+
+		const commentsCountInfo = document.createElement('span');
+		commentsCountInfo.setAttribute("class", this.commentsCountClass);
+		commentsCountInfo.textContent = `${this.commentsCount} comments`;
+
+		const user = document.createElement('span');
+		user.setAttribute("class", this.userClass);
+		user.textContent = this.userInfo.nickname;
+
+		[commentsCountInfo, user].forEach(node => headerContainer.appendChild(node));
+
+		return headerContainer;
 
 	}
 
