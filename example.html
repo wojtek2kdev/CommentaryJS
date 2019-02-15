@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<style>
+
+		.feed {
+
+			position: absolute;
+			width: 800px;
+			height: auto;
+
+			margin: 10px;
+
+			left: 50%;
+			transform: translateX(-50%);
+
+		}
+
+		#commentary {
+			width: auto;
+			height: auto;
+		}
+
+		.header {
+
+			display: flex;
+			flex-flow: row;
+
+			margin-bottom: 20px;
+			padding-bottom: 10px;
+			border-bottom: 2px solid black;
+
+			font-size: 24px;
+
+		}
+
+		.header-count {
+
+			flex: 1;
+
+		}
+
+		.comment-input {
+
+			display: flex;
+			flex-flow: row;
+
+		}
+
+		.comment-input--textarea {
+
+			flex: 1;
+
+			margin-left: 10px;
+			padding: 8px;
+
+			border: 2px solid grey;
+
+			outline: 0;
+
+			-webkit-user-modify: read-write-plaintext-only;
+
+
+		}
+
+		.comments {
+
+			list-style-type: none;
+
+			padding: 0;
+
+		}
+
+		.comment {
+
+      display: grid;
+			grid-template-columns: auto auto auto 1fr;
+			grid-template-rows: 20px auto 30px;
+
+		}
+
+		.comment-thumbnail {
+
+			grid-row: 1 / 2;
+			grid-column: 1 / 2;
+
+			background: black;
+
+			width: 65px;
+			height: 65px;
+
+			color: white;
+
+		}
+
+		.comment-content {
+
+			grid-row: 2 / 3;
+			grid-column: 2 / 5;
+
+			padding-left: 10px;
+
+		}
+
+		.comment-date {
+
+			grid-row: 1 / 2;
+			grid-column: 2 / 3;
+
+			padding: 0px 5px;
+
+		}
+
+		.comment-author {
+
+			grid-row: 1 / 2;
+			grid-column: 3 / 4;
+
+			color: #0072cb;
+			font-weight: bold;
+
+		}
+
+	</style>
+	<title>Commentary test</title>
+</head>
+<body>
+	<div class="feed">
+	  <div id="commentary"></div>
+	</div>
+	<script src="/client/commentary.js"></script>
+	<script>
+
+		const dataExtractor = async (fetched) => await fetched.json();
+		
+		const summonUserInfo = async () => await dataExtractor(await fetch("/commentary/user"));
+
+		const channel = new Channel({
+			commentsURI: "/commentary/channel/1",
+		},{
+		
+		},
+		{
+			dataExtractor,
+			summonUserInfo,
+		});
+	</script>
+</body>
+</html>
