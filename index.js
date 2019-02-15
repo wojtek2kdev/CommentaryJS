@@ -9,22 +9,73 @@ class Server {
 		onCommentWriting,
 		onCommentUpate,
 		onReactionSent,
-		onReactionUpdate
+		onReactionUpdate,
 		commentsFetchCallback,
-	}, port=8081){
-		this.port = process.env.PORT || 8081;
-		server.listen(port);
+		authCallback,
+		forbiddenCallback,
+	}, port=8081, channels){
 
-		onCommentsFetch(commentsFetchCallback);
+		this.forbiddenCallback = forbiddenCallback;
+		this.authCallback = authCallback;
 
-		app.get('/commentary', (req, res) => {
-			io.on('connection', (socket) => {
-				socket.on('writing', async (data) => await onCommentWriting(io, socket, data));
-				socket.on('sent', async (data) => await onCommendSent(io, socket, data));
-				socket.on('update', async (data) => await onCommentUpdate(io, socket, data));
-			});
+		this.port = process.PORT || 8081;
+		server.listen(this.port);
+
+		this.onCommentsFetch(commentsFetchCallback);
+
+		channels = channels.map(channelId => {
+			const channel = io.of(`/commentary/channel/${channelId}`)
+				.on('connection', (socket) => {
+					socket.on('comment_sent', async (data) => {
+						await onAuthenticatedConnection(
+							socket,
+							data, 
+							() => await onCommentSent(channel, socket, data),
+						);
+					});
+					socket.on('comment_update', async (data) => {
+						await onAuthenticatedConnection(
+							socket,
+							data, 
+							() => await onCommentUpdate(channel, socket, data),
+						);
+					});
+					socket.on('comment_writing', async (data) => {
+						await onAuthenticatedConnection(
+							socket,
+							data, 
+							() => await onCommentWriting(channel, socket, data),
+						);
+					});	
+					socket.on('reaction_sent', async (data) => {
+						await onAuthenticatedConnection(
+							socket,
+							data, 
+							() => await onReactionSent(channel, socket, data),
+						);
+					});
+					socket.on('reaction_update', async (data) => {
+						await onAuthenticatedConnection(
+							socket,
+							data, 
+							() => await onReactionUpdate(channel, socket, data),
+						);
+					});
+				});
+			return {
+					id: channelId, 
+					channel
+			};
 		});
+		
+	}
 
+	async onAuthenticatedConnection(socket, data, action){
+		if(await this.authCallback(data)){
+			await action();
+		} else {
+			await this.forbiddenCallback(socket);
+		}
 	}
 
 	onCommentsFetch(callback) {
@@ -34,6 +85,7 @@ class Server {
 	};
 
 }
+
 
 module.exports = Server;
 
