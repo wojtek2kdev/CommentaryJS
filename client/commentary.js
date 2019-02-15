@@ -9,6 +9,8 @@ class Channel {
 		commentListClass="comments",
 		commentContainerClass="comment",
 		commentThumbnailClass="comment-thumbnail",
+		commentDateClass="comment-date",
+		commentAuthorClass="comment-author",
 		commentContentClass="comment-content",
 		reactionClass="reaction",
 		inputClass="comment-input",
@@ -25,6 +27,8 @@ class Channel {
 		this.commentListClass = commentListClass;
 		this.commentContainerClass = commentContainerClass;
 		this.commentThumbnailClass = commentThumbnailClass;
+		this.commentDateClass = commentDateClass;
+		this.commentAuthorClass = commentAuthorClass;
 		this.commentContentClass = commentContentClass;
 		this.reactionClass = reactionClass;
 		this.inputClass = inputClass;
@@ -66,11 +70,19 @@ class Channel {
 
 		thumbnailAttributes.forEach(({attr, val}) => commentThumbnail.setAttribute(attr, val));
 
+		const date = document.createElement(`span`);
+		date.setAttribute("class", this.commentDateClass);
+		date.textContent = comment.date;
+
+		const author = document.createElement(`span`);
+		author.setAttribute("class", this.commentAuthorClass);
+		author.textContent = comment.author;
+
 		const commentContent = document.createElement(`p`);
 		commentContent.setAttribute("class", this.commentContentClass);
 		commentContent.textContent = comment.content;
 
-		[commentThumbnail, commentContent].forEach(node => commentContainer.appendChild(node));
+		[commentThumbnail, date, author, commentContent].forEach(node => commentContainer.appendChild(node));
 
 		return commentContainer;
 
