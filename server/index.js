@@ -34,14 +34,18 @@ class Server {
 							await onAuthenticatedConnection(
 								socket,
 								data, 
-								() => await onCommentSent(channel, socket, data),
+								(validation) => {
+									if(validation(socket, data, commentValidator)) await onCommentSent(channel, socket, data);
+								}
 							);
 						});
 						socket.on('comment_update', async (data) => {
 							await onAuthenticatedConnection(
 								socket,
 								data, 
-								() => await onCommentUpdate(channel, socket, data),
+								(validation) => {
+									if(validation(socket, data, commentValidator)) await onCommentUpdate(channel, socket, data);
+								}
 							);
 						});
 						socket.on('comment_writing', async (data) => {
