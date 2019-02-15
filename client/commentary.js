@@ -44,12 +44,31 @@ class Channel {
 
 	generateComment(comment){
 		
-		const commentContainer = document.createElement(`<div class="${this.commentContainerClass}"></div>`);
+		const commentContainer = document.createElement(`div`);
+		commentContainer.setAttribute("class", this.commentContainerClass);
 
-		const commentThumbnail = document.createElement(`<img src="${comment.thumbnail}" alt="thumbnail" class="${this.commentThumbnailClass}">`);
+		const commentThumbnail = document.createElement(`img`);
+		
+		const thumbnailAttributes = [
+			{
+				attr: "src",
+				val: comment.thumbnail,
+			},
+			{
+				attr: "alt",
+				val: "thumbnail",
+			},
+			{
+				attr: "class", 
+				val: this.commentThumbnailClass,
+			}
+		];
 
-		const commentContent = document.createElement(`<p class="${this.commentContentClass}"></p>`);
-		commentContet.textContent = comment.content;
+		thumbnailAttributes.forEach(({attr, val}) => commentThumbnail.setAttribute(attr, val));
+
+		const commentContent = document.createElement(`p`);
+		commentContent.setAttribute("class", this.commentContentClass);
+		commentContent.textContent = comment.content;
 
 		[commentThumbnail, commentContent].forEach(node => commentContainer.appendChild(node));
 
@@ -63,7 +82,8 @@ class Channel {
 
 	generateChannel(comments){
 		
-		const commentList = document.createElement(`<ul class="${this.commentListClass}"></ul>`);
+		const commentList = document.createElement('ul');
+		commentList.setAttribute("class", this.commentListClass);
 		
 		comments.forEach(comment => {
 			commentList.appendChild(this.generateComment(comment));								
