@@ -154,12 +154,17 @@ class Channel {
 
 		const textarea = document.createElement('div');
 		textarea.setAttribute("class", this.commentTextAreaClass);
+    textarea.setAttribute("placeholder", "Type a comment here..");
 
 		[userThumbnail, textarea].forEach(node => inputContainer.appendChild(node));
 		
 		return inputContainer;
 
 	}
+
+  textareaPlaceholderHide(){
+    document.querySelector('.comment-input--textarea_placeholder').classList.toggle("hidden");
+  }
 
 	generateBlogLikeHeader(){
 
