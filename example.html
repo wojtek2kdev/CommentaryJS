@@ -64,7 +64,19 @@
 
 		}
 
-		.comments {
+	
+    .comment-input--textarea:empty:not(:focus):before {
+
+      content: attr(placeholder);
+      font-size: 28px;
+      color: lightgrey;
+
+      margin: auto 10px;
+
+    }
+
+
+    .comments {
 
 			list-style-type: none;
 
