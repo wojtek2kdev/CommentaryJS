@@ -7,6 +7,11 @@ class Channel {
 		commentsURI,
 	} = {},
 	{
+		commentsHeaderClass="header",
+		commentsCountClass="header-count",
+		commentsUserClass="header-user",
+		commentInputClass="comment-input",
+		commentTextAreaClass="comment-input--textarea",
 		commentListClass="comments",
 		commentContainerClass="comment",
 		commentThumbnailClass="comment-thumbnail",
@@ -28,6 +33,11 @@ class Channel {
 		this.dataExtractor = dataExtractor;
 		this.summonUserInfo = summonUserInfo;
 
+		this.commentsHeaderClass = commentsHeaderClass;
+		this.commentsCountClass = commentsCountClass;
+		this.commentsUserClass = commentsUserClass;
+		this.commentInputClass = commentInputClass;
+		this.commentTextAreaClass = commentTextAreaClass;
 		this.commentListClass = commentListClass;
 		this.commentContainerClass = commentContainerClass;
 		this.commentThumbnailClass = commentThumbnailClass;
@@ -46,8 +56,10 @@ class Channel {
 			let header;
 			if(this.isBlogLike) header = this.generateBlogLikeHeader();
 			const channel = this.generateChannel(comments);
-			
+			const commentInput = this.generateCommentInput();
+
 			this.objective.appendChild(header);
+			this.objective.appendChild(commentInput);
 			this.objective.appendChild(channel);
 
 		});
@@ -103,11 +115,13 @@ class Channel {
 		const {
 			id,
 			nickname,
+			thumbnail,
 			token
 		} = await this.summonUserInfo();
 		return {
 			id,
 			nickname,
+			thumbnail,
 			token,
 		};
 	}
@@ -117,6 +131,33 @@ class Channel {
 	}
 
 	generateCommentInput(){
+
+		const inputContainer = document.createElement('div');
+		inputContainer.setAttribute("class", this.commentInputClass);
+
+		const userThumbnail = document.createElement('img');
+		const thumbnailAttributes = [
+			{
+				attr: "src",
+				val: this.userInfo.thumbnail,
+			},
+			{
+				attr: "alt",
+				val: "thumbnail",
+			},
+			{
+				attr: "class",
+				val: this.commentThumbnailClass,
+			},
+		];
+		thumbnailAttributes.forEach(({attr, val}) => userThumbnail.setAttribute(attr, val));
+
+		const textarea = document.createElement('div');
+		textarea.setAttribute("class", this.commentTextAreaClass);
+
+		[userThumbnail, textarea].forEach(node => inputContainer.appendChild(node));
+		
+		return inputContainer;
 
 	}
 
@@ -130,7 +171,7 @@ class Channel {
 		commentsCountInfo.textContent = `${this.commentsCount} comments`;
 
 		const user = document.createElement('span');
-		user.setAttribute("class", this.userClass);
+		user.setAttribute("class", this.commentsUserClass);
 		user.textContent = this.userInfo.nickname;
 
 		[commentsCountInfo, user].forEach(node => headerContainer.appendChild(node));
