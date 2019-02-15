@@ -32,7 +32,8 @@ class Channel {
 		this.objective = document.querySelector(target);
 
 		this.fetchComments().then(comments => {
-			this.generateChannel(comments);												 
+			const channel = this.generateChannel(comments);												 
+			this.objective.appendChild(channel);
 		});
 
 	}
@@ -49,20 +50,26 @@ class Channel {
 
 		const commentContent = document.createElement(`<p class="${this.commentContentClass}"></p>`);
 		commentContet.textContent = comment.content;
-	
+
 		[commentThumbnail, commentContent].forEach(node => commentContainer.appendChild(node));
 
 		return commentContainer;
 
 	}
 
-	generateReactions(comment, reactions){
+	generateReactions(comment, commentContainer){
 
 	}
 
 	generateChannel(comments){
-
 		
+		const commentList = document.createElement(`<ul class="${this.commentListClass}"></ul>`);
+		
+		comments.forEach(comment => {
+			commentList.appendChild(this.generateComment(comment));								
+		});
+
+		return commentList;
 
 	}
 
