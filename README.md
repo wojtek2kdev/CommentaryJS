@@ -1,10 +1,24 @@
+<p align="center">
+  <h1 align="center">
+    <img src="https://github.com/wojtek2kdev/CommentaryJS/blob/master/commentary.png" alt="commentaryjs" width="400"><br>
+    <img src="https://img.shields.io/github/license/wojtek2kdev/CommentaryJS.svg?style=for-the-badge"><br>
+    <img src="https://img.shields.io/github/issues/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/issues-closed/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/issues-pr/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/issues-pr-closed/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <br>
+    <img src="https://img.shields.io/github/watchers/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/stars/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/forks/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+  </h1>
+</p>
+
 ### Requirements
 
-1. MongoDB as database and mongoose as orm
+1. Some CRUD system to store comments
 2. Some autorization method eg. OAuth / JWT - as you wish.
-3. WebSocket for realtime comment and reactions
 4. One comment channel for each target (target can be eg. post on blog)
-5. Endpoint for fetching comments channel by current target.
+5. Endpoint for fetching comments from channel by current target.
 
 ### Process
 
