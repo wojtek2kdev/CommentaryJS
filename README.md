@@ -1,19 +1,33 @@
+<p align="center">
+  <h1 align="center">
+    <img src="https://github.com/wojtek2kdev/CommentaryJS/blob/master/commentary.png" alt="commentaryjs" width="400"><br>
+    <img src="https://img.shields.io/github/license/wojtek2kdev/CommentaryJS.svg?style=for-the-badge"><br>
+    <img src="https://img.shields.io/github/issues/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/issues-closed/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/issues-pr/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/issues-pr-closed/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <br>
+    <img src="https://img.shields.io/github/watchers/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/stars/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+    <img src="https://img.shields.io/github/forks/wojtek2kdev/CommentaryJS.svg?style=for-the-badge">
+  </h1>
+</p>
+
 ### Requirements
 
-1. MongoDB as database and mongoose as orm
+1. Some CRUD system to store comments
 2. Some autorization method eg. OAuth / JWT - as you wish.
-3. WebSocket for realtime comment and reactions
 4. One comment channel for each target (target can be eg. post on blog)
-5. Endpoint for fetching comments channel by current target.
+5. Endpoint for fetching comments from channel by current target.
 
 ### Process
 
 1. HTTP GET --> [Website eg. post] --> SERVER
 2. SERVER HTTP GET --> [Resource] --> CLIENT
-3. CLIENT GET /commentary/channel/:id --> [Commentary WS Channel] --> SERVER
-4. Server add client to channel
-5. Server respose to client an ws channel.
-6. Client generate comments from response and start listening
+3. CLIENT GET /commentary/channel/:id --> [Comments for this channel] --> SERVER
+4. SERVER GET /commentary/channel/:id --> [Comments] --> CLIENT
+5. Client generate channel
+6. Client connect with web socket for specific channel
 
 ### Communication
 
@@ -24,10 +38,11 @@
 ```js
 {
 	channel: id,
+        token,
 	target: {
 		type: "comment|reaction",
 		value: content|number,
-	}
+	},
 }
 ```
 
@@ -36,6 +51,7 @@
 ```js
 {
 	channel: id,
+        token,
 	target: {
 		id: id,
 		value: content|number // if "" or 0 then it'll be deleted.
