@@ -24,10 +24,10 @@
 
 1. HTTP GET --> [Website eg. post] --> SERVER
 2. SERVER HTTP GET --> [Resource] --> CLIENT
-3. CLIENT GET /commentary/channel/:id --> [Commentary WS Channel] --> SERVER
-4. Server add client to channel
-5. Server respose to client an ws channel.
-6. Client generate comments from response and start listening
+3. CLIENT GET /commentary/channel/:id --> [Comments for this channel] --> SERVER
+4. SERVER GET /commentary/channel/:id --> [Comments] --> CLIENT
+5. Client generate channel
+6. Client connect with web socket for specific channel
 
 ### Communication
 
