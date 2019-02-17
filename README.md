@@ -38,10 +38,11 @@
 ```js
 {
 	channel: id,
+  token,
 	target: {
 		type: "comment|reaction",
 		value: content|number,
-	}
+	},
 }
 ```
 
@@ -50,6 +51,7 @@
 ```js
 {
 	channel: id,
+  token,
 	target: {
 		id: id,
 		value: content|number // if "" or 0 then it'll be deleted.
