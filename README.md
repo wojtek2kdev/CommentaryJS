@@ -37,7 +37,6 @@
 
 ```js
 {
-	channel: id,
         token,
 	target: {
 		type: "comment|reaction",
@@ -50,7 +49,6 @@
 
 ```js
 {
-	channel: id,
         token,
 	target: {
 		id: id,
@@ -88,7 +86,7 @@ Put main commentary container wherever you want like this.
 <div id="commentary"></div>
 ```
 
-Below, or somewhere else init commentary script.
+Below, or elsewhere init commentary script.
 
 ```js
 // ? optional
