@@ -2,30 +2,22 @@ const app = require('express')();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 
-class Server {
-
-	constructor({
+const Server = ({
 		onCommentSent,
 		onCommentWriting,
 		onCommentUpate,
 		onReactionSent,
 		onReactionUpdate,
-	}, {
 		commentsFetchCallback,
 		authCallback,
 		forbiddenCallback,
-	}, {
 		commentValidator,
 		reactionValidator,
-	}, port=8081, channels){
+}, port=8081, channels) => {
 
-		this.forbiddenCallback = forbiddenCallback;
-		this.authCallback = authCallback;
+		server.listen(port);
 
-		this.port = process.PORT || 8081;
-		server.listen(this.port);
-
-		this.onCommentsFetch(commentsFetchCallback);
+		onCommentsFetch(commentsFetchCallback);
 
 		channels = channels.map(channelId => {
 			const channel = io.of(`/commentary/channel/${channelId}`)
@@ -80,23 +72,21 @@ class Server {
 							channel
 					};
 
-				});
-		
-	}
+    });
 
-	async onAuthenticatedConnection(socket, data, action){
-		if(await this.authCallback(data)){
+	const onAuthenticatedConnection = async (socket, data, action) => {
+		if(await authCallback(data)){
 			await action(validation);
 		} else {
-			await this.forbiddenCallback(socket);
+			await forbiddenCallback(socket);
 		}
 	}
 
-	async validation(socket, data, validator){
-	  return validator(socket, data, (errorMessage) => this.forbiddenCallback(socket, errorMessage));
+	const validation = async (socket, data, validator) => {
+	  return validator(socket, data, (errorMessage) => forbiddenCallback(socket, errorMessage));
 	}
 
-	onCommentsFetch(callback) {
+	const onCommentsFetch = (callback) => {
 		app.get('/commentary/channels/:id', async (req, res) => {
 			res.body = await callback(req.params.id); 
 		});
