@@ -15,6 +15,34 @@ const Server = ({
 		reactionValidator,
 }, port=8081, channels) => {
 
+    const events = [
+      {
+        name: 'comment_sent',
+        action: onCommentSent,
+        validator: commentValidator,
+      },
+      {
+        name: 'comment_update',
+        action: onCommentUpdate,
+        validator: commentValidator,
+      },
+      {
+        name: 'comment_writing',
+        action: onCommentWriting,
+        validator: () => true,
+      },
+      {
+        name: 'reaction_sent',
+        action: onReactionSent,
+        validator: reactionValidator,
+      },
+      {
+        name: 'reaction_update',
+        action: onReactionUpdate,
+        validator: reactionValidator,
+      },
+    ];
+    
 		server.listen(port);
 
 		onCommentsFetch(commentsFetchCallback);
@@ -22,56 +50,24 @@ const Server = ({
 		channels = channels.map(channelId => {
 			const channel = io.of(`/commentary/channel/${channelId}`)
 				.on('connection', (socket) => {
-						socket.on('comment_sent', async (data) => {
-							await onAuthenticatedConnection(
-								socket,
-								data, 
-								(validation) => {
-									if(validation(socket, data, commentValidator)) await onCommentSent(channel, socket, data);
-								}
-							);
-						});
-						socket.on('comment_update', async (data) => {
-							await onAuthenticatedConnection(
-								socket,
-								data, 
-								(validation) => {
-									if(validation(socket, data, commentValidator)) await onCommentUpdate(channel, socket, data);
-								}
-							);
-						});
-						socket.on('comment_writing', async (data) => {
-							await onAuthenticatedConnection(
-								socket,
-								data, 
-								() => await onCommentWriting(channel, socket, data),
-							);
-						});	
-						socket.on('reaction_sent', async (data) => {
-							await onAuthenticatedConnection(
-								socket,
-								data, 
-								(validation) => {
-									if(validation(socket, data, reactionValidator)) await onReactionSent(channel, socket, data);
-								}
-							);
-						});
-						socket.on('reaction_update', async (data) => {
-							await onAuthenticatedConnection(
-								socket,
-								data, 
-								(validation) => {
-									if(validation(socket, data, reactionValidator)) await onReactionUpdate(channel, socket, data);
-								}
-							);
-						});
+            events.forEach(({name, action, validator}) => {
+             socket.on(name, async (data) => {
+                await onAuthenticatedConnection(
+                  socket,
+                  data,
+                  (validation) => {
+                    const message = messageExtractor(data);
+                    if(validation(socket, message, validator)) await action(channel, socket, message);
+                  }
+                );      
+             });             
+            });
 					});
 
 					return {
 							id: channelId, 
 							channel
 					};
-
     });
 
 	const onAuthenticatedConnection = async (socket, data, action) => {
