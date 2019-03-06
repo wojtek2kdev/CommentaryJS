@@ -99,7 +99,7 @@ const Server = ({
 
   const messageExtractor = (data) => new Promise((res, rej) => {
     ['token', 'type', 'value'].forEach(key => {
-      if(!(key in data)) rej(new Error("Sent message is incomplete."));
+      if(!(key in data)) rej(new Error("Sent message is incomplete"));
     });
     res({
       token: data.token,
