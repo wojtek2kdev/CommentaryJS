@@ -56,8 +56,11 @@ const Server = ({
                   socket,
                   data,
                   (validation) => {
-                    const message = messageExtractor(data);
-                    if(validation(socket, message, validator)) await action(channel, socket, message);
+                    messageExtractor(data)
+                      .then(message => {
+                        if(validation(socket, message, validator)) await action(channel, socket, message);
+                      })
+                      .catch(err => messageExtractorError(err));
                   }
                 );      
              });             
@@ -84,9 +87,24 @@ const Server = ({
 
 	const onCommentsFetch = (callback) => {
 		app.get('/commentary/channels/:id', async (req, res) => {
-			res.body = await callback(req.params.id); 
+			res.body = await callback(req); 
 		});
 	};
+
+  const messageExtractor = (data) => new Promise((res, rej) => {
+    ['token', 'type', 'value'].forEach(key => {
+      if(!(key in data)) rej(new Error("Sent message is incomplete."));
+    });
+    res({
+      token: data.token,
+      type: data.type,
+      value: data.value,
+    });
+  });
+
+  return {
+      messageExtractor,
+  }
 
 }
 
