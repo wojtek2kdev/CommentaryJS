@@ -4,7 +4,7 @@
   "description": "Javascript module to simplifying create an real time comment system. ",
   "main": "index.js",
   "scripts": {
-    "test": "mocha ",
+    "test": "npx mocha test/**/*.spec.js",
     "bundle": "browserify commentary.js -o bundle.js",
     "start": "nodemon app.js"
   },
