@@ -4,7 +4,7 @@
   "description": "Javascript module to simplifying create an real time comment system. ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "npx mocha test/**/*.spec.js",
     "bundle": "browserify commentary.js -o bundle.js",
     "start": "nodemon app.js"
   },
@@ -28,6 +28,8 @@
     "@babel/core": "^7.2.2",
     "babel": "^6.23.0",
     "babel-core": "^6.26.3",
+    "chai": "^4.2.0",
+    "mocha": "^6.0.2",
     "nodemon": "^1.18.10",
     "npx": "^10.2.0"
   }

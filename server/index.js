@@ -13,65 +13,71 @@ const Server = ({
 		forbiddenCallback,
 		commentValidator,
 		reactionValidator,
-}, port=8081, channels) => {
+} = {}, port=8081, channels) => {
 
-    const events = [
-      {
-        name: 'comment_sent',
-        action: onCommentSent,
-        validator: commentValidator,
-      },
-      {
-        name: 'comment_update',
-        action: onCommentUpdate,
-        validator: commentValidator,
-      },
-      {
-        name: 'comment_writing',
-        action: onCommentWriting,
-        validator: () => true,
-      },
-      {
-        name: 'reaction_sent',
-        action: onReactionSent,
-        validator: reactionValidator,
-      },
-      {
-        name: 'reaction_update',
-        action: onReactionUpdate,
-        validator: reactionValidator,
-      },
-    ];
-    
-		server.listen(port);
+    const events = [];
+   
+    const init = () => {
 
-		onCommentsFetch(commentsFetchCallback);
+      events = [
+        {
+          name: 'comment_sent',
+          action: onCommentSent,
+          validator: commentValidator,
+        },
+        {
+          name: 'comment_update',
+          action: onCommentUpdate,
+          validator: commentValidator,
+        },
+        {
+          name: 'comment_writing',
+          action: onCommentWriting,
+          validator: () => true,
+        },
+        {
+          name: 'reaction_sent',
+          action: onReactionSent,
+          validator: reactionValidator,
+        },
+        {
+          name: 'reaction_update',
+          action: onReactionUpdate,
+          validator: reactionValidator,
+        },
+      ];
 
-		channels = channels.map(channelId => {
-			const channel = io.of(`/commentary/channel/${channelId}`)
-				.on('connection', (socket) => {
-            events.forEach(({name, action, validator}) => {
-             socket.on(name, async (data) => {
-                await onAuthenticatedConnection(
-                  socket,
-                  data,
-                  (validation) => {
-                    messageExtractor(data)
-                      .then(message => {
-                        if(validation(socket, message, validator)) await action(channel, socket, message);
-                      })
-                      .catch(err => messageExtractorError(err));
-                  }
-                );      
-             });             
+
+      server.listen(port);
+
+      onCommentsFetch(commentsFetchCallback);
+
+      channels = channels.map(channelId => {
+        const channel = io.of(`/commentary/channel/${channelId}`)
+          .on('connection', (socket) => {
+              events.forEach(({name, action, validator}) => {
+               socket.on(name, async (data) => {
+                  await onAuthenticatedConnection(
+                    socket,
+                    data,
+                    (validation) => {
+                      messageExtractor(data)
+                        .then(async message => {
+                          if(validation(socket, message, validator)) await action(channel, socket, message);
+                        })
+                        .catch(err => messageExtractorError(err));
+                    }
+                  );      
+               });             
+              });
             });
-					});
 
-					return {
-							id: channelId, 
-							channel
-					};
-    });
+            return {
+                id: channelId, 
+                channel
+            };
+      });
+    }
 
 	const onAuthenticatedConnection = async (socket, data, action) => {
 		if(await authCallback(data)){
@@ -93,7 +99,7 @@ const Server = ({
 
   const messageExtractor = (data) => new Promise((res, rej) => {
     ['token', 'type', 'value'].forEach(key => {
-      if(!(key in data)) rej(new Error("Sent message is incomplete."));
+      if(!(key in data)) rej(new Error("Sent message is incomplete"));
     });
     res({
       token: data.token,
