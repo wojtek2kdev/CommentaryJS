@@ -23,9 +23,13 @@ describe('Message extractor', () => {
 
   it('Should rejects with error info that msg is incomplete', (done) => {
     server().messageExtractor({
-                              
+      unnecessaryInfo1: 'test',
+      type: 'comment',
+      value: 'Some nice comment',
+      unnecessaryInfo2: 2,
     }).catch(err => {
-            
+        expect(err.message).eq("Sent message is incomplete");
+        done();
     }); 
   });
 
