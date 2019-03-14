@@ -1,3 +1,5 @@
+const io = require("socket.io-client");
+
 class Channel {
 
 	constructor({
@@ -19,6 +21,8 @@ class Channel {
 		this.objective = target || document.querySelector(target);
     this.preset = preparePreset(this.objective);
     this.events = events;
+
+    this.channel = io(this.wsURI);
 
 		(async () => {
       const comments = await this.fetchComments();
@@ -51,6 +55,14 @@ class Channel {
 			token,
 		};
 	}
+
+  setupSender(name){ 
+    return (data) => (message) => this.socket.emit(name, message(data));
+  }
+
+  setupReceiver(name){
+    return (listener) => this.socket.on(name, (data) => listener(data));
+  }
 
 }
 
