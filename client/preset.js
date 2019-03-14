@@ -15,9 +15,13 @@ class Preset {
         comments: this.ctx.comments,
         user: this.ctx.user,
       },
+      mutations: {
+        appendComment: (state, comment) => state.comments.push(comment),
+        updateComment: (state, comment) => {
+
+        },
+      },
       actions: {
-        receivers: this.ctx.events.receivers,
-        senders: this.ctx.events.senders,
       }
     });
     
