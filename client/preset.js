@@ -1,5 +1,5 @@
-const Vue = require('vue');
-const Vuex = require('vuex');
+import Vue from 'vue';
+import Vuex from 'vuex';
 
 class Preset {
 
@@ -22,6 +22,8 @@ class Preset {
         },
       },
       actions: {
+        sender: this.ctx.sender,
+        receiver: this.ctx.receiver,
       }
     });
     
