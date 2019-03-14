@@ -1,4 +1,4 @@
-const io = require("socket.io-client");
+import io from 'socket.io-client';
 
 class Channel {
 
@@ -56,12 +56,12 @@ class Channel {
 		};
 	}
 
-  setupSender(name){ 
+  sender(name){ 
     return (data) => (message) => this.socket.emit(name, message(data));
   }
 
-  setupReceiver(name){
-    return (listener) => this.socket.on(name, (data) => listener(data));
+  receiver(ctx, listener){
+    this.socket.on(listener.name, (data) => listener.action(ctx, data));
   }
 
 }
