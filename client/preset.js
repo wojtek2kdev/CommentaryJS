@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 
-class Preset {
+export default class Preset {
 
   constructor(component, ctx){
    
