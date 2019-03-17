@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-export default class Channel {
+export class Channel {
 
 	constructor({
 		target,
