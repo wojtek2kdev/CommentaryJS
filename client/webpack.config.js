@@ -1,12 +1,12 @@
+require("@babel/polyfill");
+
 const path = require('path')
 const webpack = require('webpack')
 
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-  entry: {
-   base: './base.js',
-  },
+  entry: ["@babel/polyfill", "./base.js"],
   output: {
     path: path.resolve(__dirname, './lib'),
     publicPath: '/lib/',
