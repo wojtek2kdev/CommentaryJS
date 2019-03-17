@@ -6,12 +6,12 @@ const webpack = require('webpack')
 const ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 module.exports = {
-  entry: ["@babel/polyfill", "./base.js"],
+  entry: ["@babel/polyfill", "./entry.js"],
   output: {
     path: path.resolve(__dirname, './lib'),
     publicPath: '/lib/',
     filename: 'commentary.js',
-    library: 'Commentary',
+    library: "Commentary",
   },
   module: {
     rules: [
