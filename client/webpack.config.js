@@ -10,7 +10,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, './lib'),
     publicPath: '/lib/',
-    filename: 'commentary.js'
+    filename: 'commentary.js',
+    library: 'Commentary',
   },
   module: {
     rules: [
