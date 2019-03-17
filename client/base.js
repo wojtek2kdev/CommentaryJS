@@ -65,5 +65,3 @@ export default class Channel {
   }
 
 }
-
-module.exports = Channel;
