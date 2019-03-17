@@ -19,7 +19,6 @@ export class Channel {
 		this.summonUserInfo = summonUserInfo;
 
 		this.objective = target || document.querySelector(target);
-    this.preset = preparePreset(this.objective);
     this.events = events;
 
     this.channel = io(this.wsURI);
@@ -56,8 +55,8 @@ export class Channel {
 		};
 	}
 
-  sender(name){ 
-    return (data) => (message) => this.socket.emit(name, message(data));
+  sender({name, data, message}){ 
+    this.socket.emit(name, message(data));
   }
 
   receiver(ctx, listener){
