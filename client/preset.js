@@ -32,7 +32,7 @@ export default class Preset {
   render(){
     this.instance = new Vue({
       store: this.store,
-      el: this.target,
+      el: this.ctx.objective, 
       render: h => h(this.component)
     });
   }
