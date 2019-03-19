@@ -1,6 +1,6 @@
 import io from 'socket.io-client';
 
-export class Channel {
+export default class Channel {
 
 	constructor({
 		target,
@@ -49,11 +49,7 @@ export class Channel {
   async init(){
     const comments = await this.fetchComments();
     const userInfo = await this.fetchUserInfo();
-    this.preset = preparePreset(this, {
-      comments,
-      userInfo,
-      target: this.objective,
-    });
+    this.preset = preparePreset(this);
     this.preset.render();
   }
 
