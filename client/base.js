@@ -23,16 +23,7 @@ export class Channel {
 
     this.channel = io(this.wsURI);
 
-		(async () => {
-      const comments = await this.fetchComments();
-      const userInfo = await this.fetchUserInfo();
-      this.preset = preparePreset(this, {
-        comments,
-        userInfo,
-        target: this.objective,
-      });
-      this.preset.render();
-    })();
+		(async () => await this.init())();
 
 	}
 
@@ -54,6 +45,17 @@ export class Channel {
 			token,
 		};
 	}
+
+  async init(){
+    const comments = await this.fetchComments();
+    const userInfo = await this.fetchUserInfo();
+    this.preset = preparePreset(this, {
+      comments,
+      userInfo,
+      target: this.objective,
+    });
+    this.preset.render();
+  }
 
   sender({name, data, message}){ 
     this.socket.emit(name, message(data));
