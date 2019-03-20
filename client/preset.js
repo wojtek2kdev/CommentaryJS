@@ -12,6 +12,9 @@ export default class Preset {
 
     this.store = new Vuex.Store({
       state: {
+        events: {
+          newComment: this.ctx.events.newComment,
+        },
         comments: this.ctx.comments,
         user: this.ctx.user,
       },
@@ -22,8 +25,8 @@ export default class Preset {
         },
       },
       actions: {
-        sender: this.ctx.sender,
-        receiver: this.ctx.receiver,
+        sender: (context, options) => this.ctx.sender(options),
+        receiver: (context, which) => this.ctx.receiver(context, which),
       }
     });
     
@@ -33,7 +36,8 @@ export default class Preset {
     this.instance = new Vue({
       store: this.store,
       el: this.ctx.objective, 
-      render: h => h(this.component)
+      render: h => h(this.component),
+      created: () => this.ctx.channelConnect()
     });
   }
 
