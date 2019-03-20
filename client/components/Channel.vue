@@ -1,7 +1,7 @@
 <template>
   <ul>
-    <li v-for="comment of comments" :key="comment">
-      <p>{{ comment }}</p>
+    <li v-for="comments of comments">
+      <p>{{ comments.content }}</p>
     </li>
   </ul>
 </template>
@@ -12,6 +12,19 @@
       return {
         comments: [],
       }
+    },
+    created(){
+
+      this.comments = this.$store.state.comments;
+
+      const {
+        newComment,
+      } = this.$store.state.events;
+
+      this.$store.dispatch('receiver', newComment());
+
+    },
+    methods: {
     }
   }
 </script>
