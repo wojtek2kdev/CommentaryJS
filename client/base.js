@@ -8,7 +8,7 @@ export default class Channel {
 		commentsURI,
 		dataExtractor,
 		summonUserInfo,
-    preparePreset,
+    preset,
     events,
 	}){
 		
@@ -17,18 +17,20 @@ export default class Channel {
 
 		this.dataExtractor = dataExtractor;
 		this.summonUserInfo = summonUserInfo;
+    this.preset = preset;
 
 		this.objective = target || document.querySelector(target);
     this.events = events;
 
-    this.channel = io(this.wsURI);
+		(async () => {
+      await this.init();
+    })();
 
-		(async () => await this.init())();
 
 	}
 
 	async fetchComments(){
-			return this.dataExtractor(await fetch(this.commentsURI));
+			return await this.dataExtractor(await fetch(this.commentsURI));
 	}
 
 	async fetchUserInfo(){
@@ -37,7 +39,7 @@ export default class Channel {
 			nickname,
 			thumbnail,
 			token
-		} = await this.summonUserInfo();
+		} = await this.dataExtractor(await this.summonUserInfo());
 		return {
 			id,
 			nickname,
@@ -47,18 +49,26 @@ export default class Channel {
 	}
 
   async init(){
-    const comments = await this.fetchComments();
-    const userInfo = await this.fetchUserInfo();
-    this.preset = preparePreset(this);
+    this.comments = await this.fetchComments();
+    this.userInfo = await this.fetchUserInfo();
+    this.preset = this.preset(this);
     this.preset.render();
   }
 
+  channelConnect(){
+    this.channel = io.connect(this.wsURI); 
+  }
+
   sender({name, data, message}){ 
-    this.socket.emit(name, message(data));
+    this.channel.emit(name, message(data));
   }
 
   receiver(ctx, listener){
-    this.socket.on(listener.name, (data) => listener.action(ctx, data));
+    const {
+      name,
+      action
+    } = listener(ctx);
+    this.channel.on(name, action);
   }
 
 }
