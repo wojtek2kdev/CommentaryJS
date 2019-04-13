@@ -40,14 +40,12 @@ export default gql`
 
   type User {
     id: ID!
-    name: String!
-    thumbnail: URL 
     profile: URL 
-    createdAt: DateTime
   }
 
   type Channel {
     _id: ID!
+    user_id: ID!
     owner: User!
     comments: [Comment]
   }
