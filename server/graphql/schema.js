@@ -1,9 +1,5 @@
 import { gql } from 'apollo-server-express';
 
-import {
-  GraphQLDateTime,
-} from 'graphql-iso-date';
-
 export default gql`
 
   scalar DateTime, URL, EmojiCode 
