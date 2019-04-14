@@ -1,4 +1,4 @@
-import { GraphQLScalarType } from 'grapql';
+import { GraphQLScalarType } from 'graphql';
 import { Kind } from 'graphql/language';
 
 const URLRegex = /((([A-Za-z]{3,9}:(?:\/\/)?)(?:[\-;:&=\+\$,\w]+@)?[A-Za-z0-9\.\-]+|(?:www\.|[\-;:&=\+\$,\w]+@)[A-Za-z0-9\.\-]+)((?:\/[\+~%\/\.\w\-_]*)?\??(?:[\-\+=&;%@\.\w_]*)#?(?:[\.\!\/\\\w]*))?)/;
