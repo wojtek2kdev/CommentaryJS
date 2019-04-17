@@ -1,6 +1,6 @@
 {
   "name": "commentaryjs",
-  "version": "1.0",
+  "version": "1.0.0",
   "description": "Javascript module to simplifying create an real time comment system. ",
   "main": "index.js",
   "scripts": {
